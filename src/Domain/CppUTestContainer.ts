@@ -147,14 +147,6 @@ export default class CppUTestContainer {
   private async UpdateTestSuite(runner: ExecutableRunner, testString: string): Promise<CppUTestSuite> {
     const testSuite = this.GetTestSuite(runner.Name);
     testSuite.UpdateFromTestListString(testString);
-    for(const test of testSuite.Tests) {
-      try {
-        const debugString = await runner.GetDebugSymbols(test.group, test.label);
-        test.AddDebugInformation(debugString);
-      } catch (error) {
-        console.error(error);
-      }
-    }
     return testSuite;
   }
 
