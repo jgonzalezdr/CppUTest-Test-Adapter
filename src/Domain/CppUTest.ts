@@ -18,14 +18,4 @@ export class CppUTest implements TestInfo {
     this.label = testString;
     this.group = group;
   }
-
-  public AddDebugInformation(testDebugString: string): void {
-    const symbolInformationLines = testDebugString.split("\n");
-    const filePath = symbolInformationLines.filter(si => si.startsWith("/"))[0];
-    const debugSymbols: string[] = filePath.split(":");
-    const file = debugSymbols[0];
-    const line = parseInt(debugSymbols[1], 10);
-    this.file = file;
-    this.line = line;
-  }
 }
