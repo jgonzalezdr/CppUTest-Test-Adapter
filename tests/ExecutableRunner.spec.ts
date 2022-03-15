@@ -17,17 +17,6 @@ const outputStrings = [
   }
 ]
 
-const debugStrings = [
-  {
-    name: "short",
-    value: "test\nline\nout"
-  },
-  {
-    name: "long",
-    value: "test\nline\nout\nthat\nis\nlonger"
-  }
-]
-
 function createFailingTestString(group: string, test: string): string {
   return `TEST(${group}, ${test})\n` +
     `/home/user/test/myTests/.cpp(58): error: Failure in TEST(${group}, ${test})\n` +
@@ -61,28 +50,10 @@ describe("ExecutableRunner should", () => {
       .and.be.an.instanceOf(Error)
   })
 
-  debugStrings.forEach(testOutput => {
-    it(`get the debug string for ${testOutput.name}`, async () => {
-      const processExecuter = setupMockCalls(undefined, testOutput.value, "");
-      const command = "runnable";
-
-      let runner = new ExecutableRunner(processExecuter, command);
-
-      let testListString = await runner.GetDebugSymbols("someGroup", "someTest");
-
-      expect(testListString).to.be.eq(testOutput.value);
-    })
-  })
-
   it("execute the command in the correct path", async () => {
     const command = "runnable";
     let calledOptions: any = {};
     const processExecuter = mock<ProcessExecuter>();
-
-    when(processExecuter.Exec(anything(), anything(), anything())).thenCall((cmd: string, options: any, callback: Function) => {
-      calledOptions = options;
-      callback(undefined, "Group1.Test1", undefined);
-    });
 
     when(processExecuter.ExecFile(anything(), anything(), anything(), anything())).thenCall((cmd: string, args: any, options: any, callback: Function) => {
       calledOptions = options;
@@ -118,7 +89,6 @@ describe("ExecutableRunner should", () => {
 
 function setupMockCalls(error: Error | undefined, returnValue: string, errorValue: string) {
   const mockedExecuter = mock<ProcessExecuter>();
-  when(mockedExecuter.Exec(anything(), anything(), anything())).thenCall((cmd: string, options: any, callback: Function) => callback(error, returnValue, errorValue));
   when(mockedExecuter.ExecFile(anything(), anything(), anything(), anything())).thenCall((cmd: string, args: any, options: any, callback: Function) => callback(error, returnValue, errorValue));
   when(mockedExecuter.KillProcess()).thenCall(() => { });
   return instance(mockedExecuter);

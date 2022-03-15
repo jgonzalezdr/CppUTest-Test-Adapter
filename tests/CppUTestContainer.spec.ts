@@ -18,7 +18,7 @@ describe("CppUTestContainer should", () => {
   let mockResultParser: ResultParser;
 
   beforeEach(() => {
-    mockRunner = createMockRunner("Exec1", "Group1.Test1 Group2.Test2");
+    mockRunner = createMockRunner("Exec1", "Group1.Test1.file1.c.5\nGroup2.Test2.file1.c.93");
     mockSetting = mock<SettingsProvider>();
     mockAdapter = mock<VscodeAdapter>();
     mockResultParser = mock<ResultParser>();
@@ -28,8 +28,8 @@ describe("CppUTestContainer should", () => {
   })
 
   it("load all tests from all testrunners", async () => {
-    const mockRunner1 = createMockRunner("Exec1", "Group1.Test1 Group2.Test2");
-    const mockRunner2 = createMockRunner("Exec2", "Group4.Test1 Group5.Test2 Group5.Test42");
+    const mockRunner1 = createMockRunner("Exec1", "Group1.Test1.file1.c.555\nGroup2.Test2.file1.c.123");
+    const mockRunner2 = createMockRunner("Exec2", "Group4.Test1.file2.cpp.2467\nGroup5.Test2.file2.cpp.12\nGroup5.Test42.file2.cpp.9874\n");
 
     const container = new CppUTestContainer([instance(mockRunner1), instance(mockRunner2)], instance(mockSetting), instance(mockAdapter), instance(mockResultParser));
 
@@ -40,9 +40,13 @@ describe("CppUTestContainer should", () => {
     expect(allTests[0].children[0].label).to.be.eq("Group1");
     expect(allTests[0].children[0].type).to.be.eq("suite");
     expect((allTests[0].children[0] as CppUTestGroup).children[0].label).to.be.eq("Test1");
+    expect((allTests[0].children[0] as CppUTestGroup).children[0].file).to.be.eq("file1.c");
+    expect((allTests[0].children[0] as CppUTestGroup).children[0].line).to.be.eq(555);
 
     expect(allTests[1].label).to.be.eq("Exec2");
     expect((allTests[1].children[1] as CppUTestGroup).children[0].label).to.be.eq("Test42");
+    expect((allTests[1].children[1] as CppUTestGroup).children[0].file).to.be.eq("file2.cpp");
+    expect((allTests[1].children[1] as CppUTestGroup).children[0].line).to.be.eq(9874);
   })
 
   it("reload all tests after clear", async () => {
@@ -61,7 +65,7 @@ describe("CppUTestContainer should", () => {
   })
 
   it("run all tests", async () => {
-    const mockRunner = createMockRunner("Exec1", "Group1.Test1 Group2.Test2");
+    const mockRunner = createMockRunner("Exec1", "Group1.Test1.file1.c.994\nGroup2.Test2.file1.c.2345\n");
 
     const container = new CppUTestContainer([instance(mockRunner)], instance(mockSetting), instance(mockAdapter), instance(mockResultParser));
 
@@ -72,7 +76,7 @@ describe("CppUTestContainer should", () => {
   })
 
   it("run test by id", async () => {
-    const mockRunner = createMockRunner("Exec1", "Group1.Test1 Group2.Test2");
+    const mockRunner = createMockRunner("Exec1", "Group1.Test1.file1.c.234\nGroup2.Test2.file1.c.332\n");
 
     const container = new CppUTestContainer([instance(mockRunner)], instance(mockSetting), instance(mockAdapter), instance(mockResultParser));
 
@@ -97,8 +101,8 @@ describe("CppUTestContainer should", () => {
   })
 
   it("run tests by executable group id", async () => {
-    const mockRunner1 = createMockRunner("Exec1", "Group1.Test1 Group2.Test2");
-    const mockRunner2 = createMockRunner("Exec2", "Group3.Test1 Group4.Test2");
+    const mockRunner1 = createMockRunner("Exec1", "Group1.Test1.file1.c.9765\nGroup2.Test2.file1.c.23445\n");
+    const mockRunner2 = createMockRunner("Exec2", "Group3.Test1.file1.c.643\nGroup4.Test2.file1.c.775\n");
 
     const container = new CppUTestContainer([instance(mockRunner1), instance(mockRunner2)], instance(mockSetting), instance(mockAdapter), instance(mockResultParser));
 
@@ -112,7 +116,7 @@ describe("CppUTestContainer should", () => {
   })
 
   it("run tests by group ids", async () => {
-    const mockRunner = createMockRunner("Exec1", "Group1.Test1 Group1.Test2 Group2.Test2 Group2.Test5");
+    const mockRunner = createMockRunner("Exec1", "Group1.Test1.file1.c.5\nGroup1.Test2.file1.c.12\nGroup2.Test2.file1.c.66\nGroup2.Test5.file1.c.765");
 
     const container = new CppUTestContainer([instance(mockRunner)], instance(mockSetting), instance(mockAdapter), instance(mockResultParser));
 
@@ -129,7 +133,7 @@ describe("CppUTestContainer should", () => {
   })
 
   it("return a TestResult after sucessful run", async () => {
-    const mockRunner = createMockRunner("Exec1", "Group1.Test1 Group1.Test2");
+    const mockRunner = createMockRunner("Exec1", "Group1.Test1.file1.c.2\nGroup1.Test2.file1.c.77\n");
     when(mockRunner.RunTest(anyString(), anyString())).thenResolve("Success");
 
     const container = new CppUTestContainer([instance(mockRunner)], instance(mockSetting), instance(mockAdapter), instance(mockResultParser));
@@ -144,7 +148,7 @@ describe("CppUTestContainer should", () => {
   })
 
   it("return a TestResult after failed run", async () => {
-    const mockRunner = createMockRunner("Exec1", "Group1.Test1 Group1.Test2");
+    const mockRunner = createMockRunner("Exec1", "Group1.Test1.file1.c.8779\nGroup1.Test2.file1.c.4\n");
     when(mockRunner.RunTest("Group1", "Test1")).thenResolve("Success");
     when(mockRunner.RunTest("Group1", "Test2")).thenResolve("Failed");
     reset(mockResultParser);

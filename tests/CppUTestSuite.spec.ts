@@ -6,7 +6,7 @@ describe('CppUTestSuite should', () => {
   const suite = new CppUTestSuite("Label");
 
   it('create a TestSuite from an test list string', () => {
-    const testListString = "Group1.Test1 Group1.Test2 Group2.Test1";
+    const testListString = "Group1.Test1.file1.c.555\nGroup1.Test2.file1.c.333\nGroup2.Test1.file1.c.753\n";
     suite.UpdateFromTestListString(testListString);
     expect(suite.label).to.be.equal("Label");
     expect(suite.children.length).to.be.eq(2);
