@@ -1,6 +1,7 @@
 [
         {
                 "name": "failingTest1",
+                "error": false,
                 "value": [
                         "TEST(ClassName, Create)",
                         "C:\\Users\\tests\\basicTests.cpp(58): error: Failure in TEST(ClassName, Create)",
@@ -17,6 +18,7 @@
         },
         {
                 "name": "failingTest2",
+                "error": false,
                 "value": [
                         "TEST(ClassName, Create)",
                         "/tests/basicTests.cpp(43): error: Failure in TEST(SecondClass, ShouldFail)",
@@ -33,6 +35,7 @@
         },
         {
                 "name": "failingTest3",
+                "error": false,
                 "value": [
                         "TEST(TEST_GROUP1, TEST1)Memutil uses static memory",
                         "Memutil heap size = 0x4000000 (67108864 bytes)",
@@ -56,7 +59,20 @@
                 ]
         },
         {
+                "name": "failingTest4",
+                "error": true,
+                "value": [
+                        "terminate called after throwing an instance of 'std::runtime_error'",
+                        "  what():  Invalid parameter value."
+                ],
+                "expected": [
+                        "terminate called after throwing an instance of 'std::runtime_error'",
+                        "  what():  Invalid parameter value."
+                ]
+        },
+        {
                 "name": "passingTest1",
+                "error": false,
                 "value": [
                         "TEST(ClassName, ShouldPass) - 0 ms"
                 ],
@@ -64,6 +80,7 @@
         },
         {
                 "name": "passingTest2",
+                "error": false,
                 "value":[
                         "TEST(TEST_GROUP1, ouptpuTEST1)Memutil uses static memory",
                         "Memutil heap size = 0x4000000 (67108864 bytes)",
@@ -76,6 +93,7 @@
         },
         {
                 "name": "ignoredTest1",
+                "error": false,
                 "value": [
                         "IGNORE_TEST(SecondClass, ShouldBeIgnored) - 0 ms"
                 ],
@@ -83,6 +101,7 @@
         },
         {
                 "name":"ignoredTest2",
+                "error": false,
                 "value":[
                         "IGNORE_TEST(TEST_GROUP1, TEST1) - 0 ms",
                         "",

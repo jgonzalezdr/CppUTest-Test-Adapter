@@ -1,5 +1,5 @@
 import { TestResult } from "./TestResult";
 
 export interface ResultParser {
-  GetResult(resultString: string): TestResult;
+  GetResult(testOutput: [boolean, string]): TestResult;
 }

@@ -106,14 +106,18 @@ export default class ExecutableRunner {
     });
   }
 
-  public RunTest(group: string, test: string): Promise<string> {
-    return new Promise<string>((resolve, reject) => {
+  public RunTest(group: string, test: string): Promise<[boolean, string]> {
+    return new Promise<[boolean, string]>((resolve, reject) => {
       this.execFile(this.command, ["-sg", group, "-sn", test, "-v"], { cwd: this.workingDirectory }, (error: ExecException | null, stdout: string, stderr: string) => {
         if (error && error.code === null) {
           console.error('stderr', error);
           reject(stderr);
         }
-        resolve(stdout);
+        if (stderr.trim() != "") {
+          resolve([true, stderr]);
+        } else {
+          resolve([false, stdout]);
+        }
       })
     });
   }

@@ -98,16 +98,28 @@ describe("ExecutableRunner should", () => {
     expect(calledOptions.cwd).to.be.eq("/tmp/myPath");
   })
 
-  it("return the correct string on run", async () => {
+  it("return the correct string on run without error", async () => {
     const resultString = createFailingTestString("myGroup", "myTest");
     const processExecuter = setupMockCalls(undefined, resultString, "");
     const command = "runnable";
 
     let runner = new ExecutableRunner(processExecuter, command);
 
-    let actualResultString = await runner.RunTest("myGroup", "myTest");
+    let actualTestOutput = await runner.RunTest("myGroup", "myTest");
 
-    expect(actualResultString).to.be.eq(resultString);
+    expect(actualTestOutput).to.be.deep.equal([false, resultString]);
+  })
+
+  it("return the correct string on run with error", async () => {
+    const errorString = "unexpected failure string";
+    const processExecuter = setupMockCalls(new Error(""), "", errorString);
+    const command = "runnable";
+
+    let runner = new ExecutableRunner(processExecuter, command);
+
+    let actualTestOutput = await runner.RunTest("myGroup", "myTest");
+
+    expect(actualTestOutput).to.be.deep.equal([true, errorString]);
   })
 
   it("kill the process currently running", () => {

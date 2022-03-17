@@ -4,7 +4,15 @@ import { ResultParser } from "./ResultParser";
 
 export class RegexResultParser implements ResultParser {
 
-  public GetResult(resultString: string): TestResult {
+  public GetResult(testOutput: [boolean, string]): TestResult {
+    if (testOutput[0]) {
+      return new TestResult(TestState.Failed, testOutput[1]);
+    } else {
+      return this.ParseResult(testOutput[1]);
+    }
+  }
+
+  private ParseResult(resultString: string): TestResult {
     const lines = resultString.split("\n");
     let state: TestState = TestState.Unknown;
     let message = "";
