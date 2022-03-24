@@ -112,39 +112,40 @@ describe("ExecutableRunner should", () => {
   })
 
   it("return the correct string on successful run", async () => {
-    const resultString = createFailingTestString("myGroup", "myTest");
-    const processExecuter = setupMockCalls(undefined, resultString, "");
+    const outputString = createFailingTestString("myGroup", "myTest");
+    const processExecuter = setupMockCalls(undefined, outputString, "");
     const command = "runnable";
 
     let runner = new ExecutableRunner(processExecuter, command);
 
     let actualTestOutput = await runner.RunTest("myGroup", "myTest");
 
-    expect(actualTestOutput).to.be.deep.equal(new RunResult(RunResultStatus.Success, resultString));
+    expect(actualTestOutput).to.be.deep.equal(new RunResult(RunResultStatus.Success, outputString));
   })
 
   it("return the correct string on run with failure", async () => {
-    const errorString = "unexpected failure string";
-    const processExecuter = setupMockCalls(new ExecError(1), errorString, "");
+    const outputString = "unexpected failure string";
+    const processExecuter = setupMockCalls(new ExecError(1), outputString, "");
     const command = "runnable";
 
     let runner = new ExecutableRunner(processExecuter, command);
 
     let actualTestOutput = await runner.RunTest("myGroup", "myTest");
 
-    expect(actualTestOutput).to.be.deep.equal(new RunResult(RunResultStatus.Failure, errorString));
+    expect(actualTestOutput).to.be.deep.equal(new RunResult(RunResultStatus.Failure, outputString));
   })
 
   it("return the correct string on run with error", async () => {
+    const outputString = "unexpected output string";
     const errorString = "unexpected error string";
-    const processExecuter = setupMockCalls(new ExecError(1), "", errorString);
+    const processExecuter = setupMockCalls(new ExecError(1), outputString, errorString);
     const command = "runnable";
 
     let runner = new ExecutableRunner(processExecuter, command);
 
     let actualTestOutput = await runner.RunTest("myGroup", "myTest");
 
-    expect(actualTestOutput).to.be.deep.equal(new RunResult(RunResultStatus.Error, errorString));
+    expect(actualTestOutput).to.be.deep.equal(new RunResult(RunResultStatus.Error, outputString + errorString));
   })
 
   it("kill the process currently running", () => {

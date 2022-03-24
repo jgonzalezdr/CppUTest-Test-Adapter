@@ -129,7 +129,7 @@ export default class ExecutableRunner {
           reject(stderr);
         }
         if (stderr.trim() != "") {
-          resolve(new RunResult(RunResultStatus.Error, stderr));
+          resolve(new RunResult(RunResultStatus.Error, stdout + stderr));
         } else if (error && error.code !== 0) {
           resolve(new RunResult(RunResultStatus.Failure, stdout));
         } else {
