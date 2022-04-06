@@ -6,7 +6,7 @@ describe('CppUTestSuite should', () => {
   const suite = new CppUTestSuite("Label");
 
   it('create a TestSuite from an test list string without location', () => {
-    const testListString = "Group1.Test1 Group1.Test2 Group2.Test1";
+    const testListString = "Group2.Test1 Group1.Test1 Group1.Test2";
     suite.UpdateFromTestListString(testListString, false);
     expect(suite.label).to.be.equal("Label");
     expect(suite.children.length).to.be.eq(2);
@@ -26,7 +26,7 @@ describe('CppUTestSuite should', () => {
   });
 
   it('create a TestSuite from an test list string with location', () => {
-    const testListString = "Group1.Test1.C:\\File\Name.cpp.345\nGroup1.Test2./path/to.test.file.9873\nGroup2.Test1.Unknown.9889877\n";
+    const testListString = "Group2.Test1.Unknown.9889877\nGroup1.Test1.C:\\File\Name.cpp.345\nGroup1.Test2./path/to.test.file.9873\n";
     suite.UpdateFromTestListString(testListString, true);
     expect(suite.label).to.be.equal("Label");
     expect(suite.children.length).to.be.eq(2);

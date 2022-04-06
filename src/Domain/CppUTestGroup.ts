@@ -25,7 +25,7 @@ export class CppUTestGroup implements TestSuiteInfo {
 
     AddTestGroup(groupName: string): CppUTestGroup {
         const testGroup = new CppUTestGroup(groupName, this.id + "/" + groupName);
-        this.children.push(testGroup);
+        this.children.unshift(testGroup);
         return testGroup;
     }
 

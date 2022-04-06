@@ -18,7 +18,7 @@ describe("CppUTestContainer should", () => {
   let mockResultParser: ResultParser;
 
   beforeEach(() => {
-    mockRunner = createMockRunner("Exec1", TestLocationFetchMode.Disabled, "Group1.Test1 Group2.Test2", false);
+    mockRunner = createMockRunner("Exec1", TestLocationFetchMode.Disabled, "Group2.Test2 Group1.Test1", false);
     mockSetting = mock<SettingsProvider>();
     mockAdapter = mock<VscodeAdapter>();
     mockResultParser = mock<ResultParser>();
@@ -29,8 +29,8 @@ describe("CppUTestContainer should", () => {
   })
 
   it("load all tests from all testrunners without location info", async () => {
-    const mockRunner1 = createMockRunner("Exec1", TestLocationFetchMode.Disabled, "Group1.Test1 Group2.Test2", false);
-    const mockRunner2 = createMockRunner("Exec2", TestLocationFetchMode.Disabled, "Group4.Test1 Group5.Test2 Group5.Test42", false);
+    const mockRunner1 = createMockRunner("Exec1", TestLocationFetchMode.Disabled, "Group2.Test2 Group1.Test1", false);
+    const mockRunner2 = createMockRunner("Exec2", TestLocationFetchMode.Disabled, "Group5.Test2 Group5.Test42 Group4.Test1", false);
     const mockSetting = mock<SettingsProvider>();
     when(mockSetting.TestLocationFetchMode).thenReturn(TestLocationFetchMode.Disabled);
 
@@ -79,8 +79,8 @@ describe("CppUTestContainer should", () => {
   })
 
   it("load all tests from all testrunners with location info", async () => {
-    const mockRunner1 = createMockRunner("Exec1", TestLocationFetchMode.TestQuery, "Group1.Test1.Test.file.name.cpp.12\nGroup2.Test2.Test2.cpp.4356\n", true);
-    const mockRunner2 = createMockRunner("Exec2", TestLocationFetchMode.TestQuery, "Group4.Test1.File4.75\nGroup5.Test2.File5.342\nGroup5.Test42.File5.4", true);
+    const mockRunner1 = createMockRunner("Exec1", TestLocationFetchMode.TestQuery, "Group2.Test2.Test2.cpp.4356\nGroup1.Test1.Test.file.name.cpp.12\n", true);
+    const mockRunner2 = createMockRunner("Exec2", TestLocationFetchMode.TestQuery, "Group5.Test2.File5.342\nGroup5.Test42.File5.4\nGroup4.Test1.File4.75", true);
     const mockSetting = mock<SettingsProvider>();
     when(mockSetting.TestLocationFetchMode).thenReturn(TestLocationFetchMode.TestQuery);
 
@@ -156,7 +156,7 @@ describe("CppUTestContainer should", () => {
   })
 
   it("run test by id", async () => {
-    const mockRunner = createMockRunner("Exec1", TestLocationFetchMode.Disabled, "Group1.Test1 Group2.Test2", false);
+    const mockRunner = createMockRunner("Exec1", TestLocationFetchMode.Disabled, "Group2.Test2 Group1.Test1", false);
 
     const container = new CppUTestContainer(instance(mockSetting), instance(mockAdapter), instance(mockResultParser));
 
@@ -196,7 +196,7 @@ describe("CppUTestContainer should", () => {
   })
 
   it("run tests by group ids", async () => {
-    const mockRunner = createMockRunner("Exec1", TestLocationFetchMode.Disabled, "Group1.Test1 Group1.Test2 Group2.Test2 Group2.Test5", false);
+    const mockRunner = createMockRunner("Exec1", TestLocationFetchMode.Disabled, "Group2.Test2 Group2.Test5 Group1.Test1 Group1.Test2", false);
 
     const container = new CppUTestContainer(instance(mockSetting), instance(mockAdapter), instance(mockResultParser));
 
